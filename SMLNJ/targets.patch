@@ -1,0 +1,66 @@
+diff --git a/config/targets b/config/targets
+index e33ac3a..d508b22 100644
+--- a/config/targets
++++ b/config/targets
+@@ -33,7 +33,7 @@
+ # itself); this is not required,  unless you are doing compiler hacking,
+ # but it may be interesting to look at.
+ #
+-#request src-smlnj
++request src-smlnj
+ 
+ # include backward-compatible versions of the Basis Library.
+ #
+@@ -117,13 +117,13 @@ request smlnj-lib
+ # NOTE: asdlgen requires that a C++ compiler be installed and it
+ # currently does not build on Windows
+ #
+-#if UNIX
+-#  request asdl
+-#endif
++if UNIX
++  request asdl
++endif
+ 
+ # pre-compile and install CM "portable graph" utility library
+ #
+-#request pgraph-util
++request pgraph-util
+ 
+ # pre-compile and install "Trace-Debug-Profile" utility library
+ # (provides simple back-trace- and coverage facilities)
+@@ -143,7 +143,7 @@ request cml-lib
+ # pre-compile and install eXene, which is a library for X-Windows programming.
+ # EXene requires CML.
+ #
+-#request eXene
++request eXene
+ 
+ # pre-compile (certain) parts of MLRISC that are not already part of the SML/NJ
+ # compiler itself
+@@ -188,7 +188,7 @@ endif
+ # This library is for parsing and pretty printing SML code.
+ # It's used by various MLRISC code generator generator.
+ #
+-#request mlrisc-tools
++request mlrisc-tools
+ 
+ # build ML-Burg
+ #
+@@ -200,14 +200,14 @@ request ml-burg
+ # (bad) documentation.
+ # (Requires the mlrisc-tools library!)
+ #
+-#request nowhere
++request nowhere
+ 
+ # Build and install 'heap2asm', which is used by 'heap2exec'
+ # for producing self-contained (aka stand-alone) executables.
+ # This facility is currently only supported on Linux and macOS
+ #
+ if UNIX
+-#  request heap2asm
++  request heap2asm
+ endif
+ 
+ # Download the documentation directory.
