@@ -1,0 +1,35 @@
+--- a/share/opendylan/build-scripts/config.jam	2023-06-25 04:01:00.000000000 -0300
++++ b/share/opendylan/build-scripts/config.jam	2023-09-19 01:44:48.709421639 -0300
+@@ -4,9 +4,13 @@
+
+ SUPPORTED_COMPILER_BACK_ENDS ?= llvm c ;
+
+-CC                ?= $(SYSTEM_ROOT)/bin/clang ;
++CLANG_ROOT        ?= nix_clang ;
++BDW_GC_ROOT       ?= nix_bdwgc ;
++LIBUNWIND_ROOT    ?= nix_libunwind ;
++
++CC                ?= $(CLANG_ROOT)/bin/clang ;
+ CCFLAGS           ?= -w -g -O2 ;
+-C++               ?= $(SYSTEM_ROOT)/bin/clang++ ;
++C++               ?= $(CLANG_ROOT)/bin/clang++ ;
+ C++FLAGS          ?= $(CCFLAGS) ;
+
+ LIBS              ?= -lm  -lunwind ;
+@@ -15,8 +19,8 @@
+
+ MPS_CFLAGS        ?=  -DGC_USE_MPS ;
+ MPS_LIBS          ?=  ;
+-BDW_GC_CFLAGS     ?= -I$(SYSTEM_ROOT)/include -DGC_THREADS -DGC_USE_BOEHM ;
+-BDW_GC_LIBS       ?= -L$(SYSTEM_ROOT)/lib -lgc ;
++BDW_GC_CFLAGS     ?= -I$(BDW_GC_ROOT)/include -DGC_THREADS -DGC_USE_BOEHM ;
++BDW_GC_LIBS       ?= -L$(BDW_GC_ROOT)/lib -lgc ;
+ BDW_GC_STATIC     ?=  ;
+ MALLOC_CFLAGS     ?= -DGC_USE_MALLOC ;
+ MALLOC_LIBS       ?= ;
+@@ -33,4 +37,4 @@
+ LLVM_GC_CFLAGS    ?= $($(LLVM_COLLECTOR)_CFLAGS) ;
+ LLVM_GC_LIBS      ?= $($(LLVM_COLLECTOR)_LIBS) ;
+ LLVM_GC_STATIC    ?= $($(LLVM_COLLECTOR)_STATIC) ;
+-RTLIBS_INSTALL +=  $(SYSTEM_ROOT)/lib/x86_64-unknown-linux-gnu/libunwind.a $(SYSTEM_ROOT)/lib/x86_64-unknown-linux-gnu/libunwind.so $(SYSTEM_ROOT)/lib/x86_64-unknown-linux-gnu/libunwind.so.1 $(SYSTEM_ROOT)/lib/x86_64-unknown-linux-gnu/libunwind.so.1.0 $(SYSTEM_ROOT)/lib/libgc.la $(SYSTEM_ROOT)/lib/libgc.so $(SYSTEM_ROOT)/lib/libgc.so.1 $(SYSTEM_ROOT)/lib/libgc.so.1.5.2 ;
++RTLIBS_INSTALL +=  $(LIBUNWIND_ROOT)/lib/libunwind.a $(LIBUNWIND_ROOT)/lib/libunwind.so $(LIBUNWIND_ROOT)/lib/libunwind.so.1 $(LIBUNWIND_ROOT)/lib/libunwind.so.1.0 $(BDW_GC_ROOT)/lib/libgc.la $(BDW_GC_ROOT)/lib/libgc.so $(BDW_GC_ROOT)/lib/libgc.so.1 $(BDW_GC_ROOT)/lib/libgc.so.1.5.1 ;

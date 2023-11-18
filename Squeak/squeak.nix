@@ -114,7 +114,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./squeak-configure-version.patch
-    #  ./squeak-plugins-discovery.patch
     ./squeak-squeaksh-nixpkgs.patch
   ];
 

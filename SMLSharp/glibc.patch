@@ -1,0 +1,52 @@
+From 827587939ff2f57efe5936fd65b2e1349057b2d3 Mon Sep 17 00:00:00 2001
+From: Nobuhiro Iwamatsu <iwamatsu@debian.org>
+Date: Tue, 12 Jul 2022 07:00:23 +0900
+Subject: [PATCH] Fix build with glibc 2.34
+
+Fails to build because the pthread specification has been changed
+in glibc 2.34.
+
+~~~
+libtool: compile:  gcc -DHAVE_CONFIG_H -I. -Wdate-time
+-D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE
+-I/<<PKGBUILDDIR>>/include -DMYTH_WRAP=MYTH_WRAP_DL -g -O2
+-ffile-prefix-map=/<<PKGBUILDDIR>>=. -fstack-protector-strong -Wformat
+-Werror=format-security -c myth_wrap_pthread.c  -fPIC -DPIC -o
+.libs/libmyth_dl_la-myth_wrap_pthread.o
+[...]
+/tmp/ccbMBQpP.s: Assembler messages:
+/tmp/ccbMBQpP.s:27485: Error: symbol `sched_yield' is already defined
+make[4]: *** [Makefile:852: libmyth_dl_la-myth_wrap_pthread.lo] Error 1
+~~~
+
+This hack around pthread_yield() definition for glibc 2.34 compat glibc 2.34
+treats pthread_yield() as a deprecated alias for sched_yield() so in order to
+provide a wrapper around pthread_yield, some asm magic is required.
+
+Author: Michael Hudson-Doyle <michael.hudson@canonical.com>
+Author: Steve Langasek <steve.langasek@ubuntu.com>
+Reference: https://launchpad.net/ubuntu/+source/massivethreads/1.00-4/+build/23574059
+Reference: https://bugs.debian.org/1014566
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@debian.org>
+---
+ src/myth_wrap_pthread.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/myth_wrap_pthread.c b/src/myth_wrap_pthread.c
+index 617fc5a..5e8bc23 100644
+--- a/src/myth_wrap_pthread.c
++++ b/src/myth_wrap_pthread.c
+@@ -567,7 +567,12 @@ int __wrap(pthread_setconcurrency)(int new_level) {
+ 
+ #if defined(HAVE_PTHREAD_YIELD)
+ /* pthread_yield (3)    - yield the processor */
++#if MYTH_WRAP == MYTH_WRAP_DL
++extern int pthread_yield_foo (void) __asm__ ("" "pthread_yield");
++int __wrap(pthread_yield_foo)(void) {
++#else
+ int __wrap(pthread_yield)(void) {
++#endif
+   int _ = enter_wrapped_func(0);
+   int ret;
+   (void)_;
+

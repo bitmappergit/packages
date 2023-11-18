@@ -1,0 +1,14 @@
+--- a/share/opendylan/build-scripts/posix-build.jam	2023-06-25 04:01:00.000000000 -0300
++++ b/share/opendylan/build-scripts/posix-build.jam	2023-09-19 01:50:25.290692842 -0300
+@@ -49,8 +49,10 @@
+   LINKFLAGSEXE += -Wl,-T,$(SYSTEM_LIBDIR)/dylan-elf-exe.script ;
+ }
+
+-OBJCOPY   ?= objcopy ;
+-STRIP     ?= strip ;
++BINUTILS_ROOT ?= nix_binutils ;
++
++OBJCOPY   ?= $(BINUTILS_ROOT)/bin/objcopy ;
++STRIP     ?= $(BINUTILS_ROOT)/bin/strip ;
+
+ CCFLAGS   += -fPIC ;
