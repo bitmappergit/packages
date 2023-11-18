@@ -26,7 +26,7 @@
           mlkit = pkgs.callPackage ./MLKit/mlkit.nix { };
           massivethreads = pkgs.callPackage ./SMLSharp/massivethreads.nix { };
           smlsharp = pkgs.callPackage ./SMLSharp/smlsharp.nix { inherit (self.packages.${system}) massivethreads; };
-          drawterm = pkgs.callPackage ./Misc/drawterm.nix
+          drawterm = pkgs.callPackage ./Misc/drawterm.nix { };
         };
       });
 }

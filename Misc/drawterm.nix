@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.9front.org/plan9front/drawterm";
-    rev = "ed9cff5a4c39322744c4708699c9ae6651b7c9ab";
-    # sha256 = "LM6UnggoxKC3e6xOlHYk9VFF99Abbdmp37nuUML8RgI=";
+    rev = "c4ea4d299aa1bbbcc972c04adf06c18245ce7674";
+    sha256 = "sha256-Tp3yZb1nteOlz/KhydFdjBrj3OrY20s/Ltfk/EBrIyk=";
   };
 
   buildInputs = [
